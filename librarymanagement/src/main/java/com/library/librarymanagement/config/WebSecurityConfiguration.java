@@ -1,5 +1,6 @@
 package com.library.librarymanagement.config;
 
+import com.library.librarymanagement.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfiguration {
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private CustomUserDetailsService userDetailsService;
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -33,10 +34,11 @@ public class WebSecurityConfiguration {
 		http.csrf().disable().authorizeHttpRequests()
 		         .requestMatchers(new AntPathRequestMatcher("/"))
 		         .permitAll()
-				.requestMatchers(new AntPathRequestMatcher("/books")).hasAuthority("USER")
+				.requestMatchers(new AntPathRequestMatcher("/{userName}/{password}")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/books")).permitAll()
 				.requestMatchers(new AntPathRequestMatcher("/admin")).hasAuthority("ADMIN")
-				.requestMatchers(new AntPathRequestMatcher("/add/book")).hasAuthority("ADMIN")
-				.requestMatchers(new AntPathRequestMatcher("/delete/book/{id}")).hasAuthority("ADMIN")
+				.requestMatchers(new AntPathRequestMatcher("/add/book")).permitAll()
+				.requestMatchers(new AntPathRequestMatcher("/delete/book/{id}")).permitAll()
 				.requestMatchers(new AntPathRequestMatcher("/update/book")).hasAuthority("ADMIN").anyRequest().authenticated()
 		         .and().httpBasic();
 

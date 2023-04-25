@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin("*")
 @RestController
 public class BookController {
    @Autowired
@@ -39,4 +39,6 @@ public class BookController {
     public void deleteBook(@PathVariable Integer id){
         bookService.deleteBookById(id);
     }
+
+
 }
